@@ -1,22 +1,19 @@
-;; Without this comment emacs adds (package-initialize) here
+;; Without this comment emacs25 adds (package-initialize) here
 ;; (package-initialize)
 
 (defconst emacs-start-time (current-time))
-
 (setq gc-cons-threshold 402653184 gc-cons-percentage 0.6)
-(load (concat (file-name-directory load-file-name)
-	                    "core/core-versions.el")
-            nil (not init-file-debug))
-(load (concat (file-name-directory load-file-name)
-	                    "core/core-load-paths.el")
-            nil (not init-file-debug))
+(load (concat (file-name-directory load-file-name) "core/core-versions.el")
+      nil (not init-file-debug))
+(load (concat (file-name-directory load-file-name) "core/core-load-paths.el")
+      nil (not init-file-debug))
 (load (concat spacemacs-core-directory "core-dumper.el")
-            nil (not init-file-debug))
+      nil (not init-file-debug))
 
 (if (not (version<= spacemacs-emacs-min-version emacs-version))
-      (error (concat "Your version of Emacs (%s) is too old. "
-		                        "Spacemacs requires Emacs version %s or above.")
-	                emacs-version spacemacs-emacs-min-version)
+    (error (concat "Your version of Emacs (%s) is too old. "
+                   "Spacemacs requires Emacs version %s or above.")
+           emacs-version spacemacs-emacs-min-version)
   (let ((file-name-handler-alist nil))
     (require 'core-spacemacs)
     (spacemacs/dump-restore-load-path)
@@ -26,13 +23,15 @@
     (configuration-layer/load)
     (spacemacs-buffer/display-startup-note)
     (spacemacs/setup-startup-hook)
-    (spacemacs/dump-eval-delayed-functions)
-    (require 'server)
-    (unless (server-running-p)
-      (message "Starting a server...")
-      (server-start))))
+    (spacemacs/dump-eval-delayed-functions)))
 
-;; ■ AGEND
+(require 'server)
+(when dotspacemacs-server-socket-dir
+  (setq server-socket-dir dotspacemacs-server-socket-dir))
+(unless (server-running-p)
+  (message "Starting a server...")
+  (server-start))
+
 (setq org-agenda-skip-deadline-if-done t)
 (setq org-agenda-skip-scheduled-if-done t)
 
@@ -42,7 +41,6 @@
 
 (setq org-agenda-span 'day)
 (setq org-agenda-block-separator "")
-
 
 ;; ■ ORG
 (setq org-modules (quote (org-protocol org-drill)))
@@ -54,8 +52,8 @@
 (setq org-drill-scope org-agenda-files)
 (setq org-drill-question-tag "@")
 
-(setq warning-minimum-level :emergency)
-(setq browse-url-browser-function 'browse-url-firefox
+(setq warning-minimum-level :emergency
+      browse-url-browser-function 'browse-url-firefox
       browse-url-firefox-arguments '("--private-window")
       shell-command-default-error-buffer "*Messages*"
       large-file-warning-threshold nil
@@ -82,7 +80,6 @@
 (setq confirm-kill-processes nil)
 
 (setq ispell-program-name "aspell")
-(yas-global-mode)
 
 (add-hook 'org-mode-hook (lambda ()
 			               (push '("[ ]" .  "☐") prettify-symbols-alist)
@@ -90,7 +87,6 @@
 			               (push '("[-]" . "❍" ) prettify-symbols-alist)
 			               (prettify-symbols-mode)))
 
-(defface org-checkbox-done-text '((t (:foreground "#71696A"))))
 
 (setq org-capture-templates
       '(("t" "Hands task" plain (clock) "- [ ] %?" :clock-keep t)
@@ -101,14 +97,12 @@
         ("v" "Input link" plain (clock) "%i" :immediate-finish t :append t)
         ("f" "File link"  plain (clock) "file:%F" :immediate-finish t :append t)
         ("p" "Paper" entry (file "~/leaf/papers.org") "* TODO %i")
-        ; Some extractions here?
+        ; Some extraction here?
         ("e" "Anything paste" plain (file "~/leaf/every.org") "%i" :immediate-finish t :prepend t :empty-lines 1)))
 
 (org-clock-persistence-insinuate)
 (setq org-clock-history-length 23)
 (setq org-clock-in-resume t)
-;; (setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
-;; (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
 (setq org-clock-out-remove-zero-time-clocks t)
 (setq org-clock-out-when-done t)
 (setq org-clock-persist t)
@@ -118,6 +112,7 @@
 (setq org-src-fontify-natively t)
 
 (setq yas-snippet-dirs '("~/dotx/snippets"))
+(yas-global-mode)
 (global-set-key (kbd "C-q") 'yas-expand)
 
 (defun core/select-line () (interactive)
@@ -236,47 +231,13 @@
       python-indent-offset 2)
 
 (add-hook 'python-mode-hook (lambda () (auto-complete-mode -1)))
+
 ;; ■ JULIE
-(setq lsp-julia-package-dir nil)
-(require 'lsp-julia)
+;; (setq lsp-julia-package-dir nil)
+;; (require 'lsp-julia)
 (add-hook 'julia-mode-hook (lambda () (auto-complete-mode -1)))
 (add-hook 'julia-mode-hook (lambda () (yas-global-mode)))
-(add-hook 'julia-mode-hook (lambda () (yas-global-mode)))
 ;; (add-hook 'julia-mode-hook (lambda () (set-input-method "TeX")))
-(require 'cl-generic)
-
-(defcustom julia-default-depot ""
-  "The default depot path, used if `JULIA_DEPOT_PATH' is unset"
-  :type 'string
-  :group 'julia-config)
-
-(defcustom julia-default-environment "~/.julia/environment/v1.3"
-  "The default julia environment"
-  :type 'string
-  :group 'julia-config)
-
-(defun julia/get-depot-path ()
-  (if-let (env-depot (getenv "JULIA_DEPOT_PATH"))
-      (expand-file-name env-depot)
-    (if (equal julia-default-depot "")
-        julia-default-depot
-      (expand-file-name julia-default-depot))))
-
-(defun julia/get-environment (dir)
-  (expand-file-name (if dir (or (locate-dominating-file dir "JuliaProject.toml")
-                                (locate-dominating-file dir "Project.toml")
-                                julia-default-environment)
-                      julia-default-environment)))
-
-;; Make project.el aware of Julia projects
-(defun julia/project-try (dir)
-  (let ((root (or (locate-dominating-file dir "JuliaProject.toml")
-                 (locate-dominating-file dir "Project.toml"))))
-    (and root (cons 'julia root))))
-(add-hook 'project-find-functions 'julia/project-try)
-
-(cl-defmethod project-roots ((project (head julia)))
-  (list (cdr project)))
 
 ;; ■ JOVIAN
 (setq jupyter-repl-echo-eval-p nil)
@@ -402,7 +363,7 @@
     ))
 
 ;;; Starts jupyter notebook in the same directory as the current buffer
-;;; With kernel corresponding to the major mode of the current buffer
+;;; With the kernel corresponding to the major mode of the current buffer
 ;;; TODO general URI
 ;;; TODO autoload init segment
 ;;; TODO delete Untitles
@@ -423,16 +384,6 @@
   "sr" 'jovian/restart-kernel
   "sj" 'jovian/ride)
 
-(spacemacs/set-leader-keys-for-major-mode 'js2-mode
-  "sc" 'ein:connect-to-notebook-buffer
-  "se" 'ein:shared-output-pop-to-buffer
-  "so" 'jovian/start-notebook
-  "sn" 'jovian/nuke
-  "sk" 'jovian/interrupt-kernel
-  "sr" 'jovian/restart-kernel
-  "se" 'jovian/pop-output
-  "sj" 'jovian/ride)
-
 (spacemacs/set-leader-keys-for-major-mode 'julia-mode
   "sc" 'ein:connect-to-notebook-buffer
   "sy" 'jovina/pop-output
@@ -441,26 +392,6 @@
   "sk" 'jovian/interrupt-kernel
   "sr" 'jovian/restart-kernel
   "sy" 'jovian/pop-output
-  "sj" 'jovian/ride)
-
-(spacemacs/set-leader-keys-for-major-mode 'ess-r-mode
-  "sc" 'ein:connect-to-notebook-buffer
-  "se" 'jovina/pop-output
-  "so" 'jovian/start-notebook
-  "sn" 'jovian/nuke
-  "sk" 'jovian/interrupt-kernel
-  "sr" 'jovian/restart-kernel
-  "se" 'jovian/pop-output
-  "sj" 'jovian/ride)
-
-(spacemacs/set-leader-keys-for-major-mode 'c-mode
-  "sc" 'ein:connect-to-notebook-buffer
-  "se" 'jovina/pop-output
-  "so" 'jovian/start-notebook
-  "sn" 'jovian/nuke
-  "sk" 'jovian/interrupt-kernel
-  "sr" 'jovian/restart-kernel
-  "se" 'jovian/pop-output
   "sj" 'jovian/ride)
 
 
@@ -499,3 +430,7 @@
              p
              q
              (- count 1)))))
+
+(find-file "~/iros/motif/bassline/double-build.jl")
+
+(org-agenda-list)
