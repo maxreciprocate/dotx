@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: g
+# key: g
+# --
+\includegraphics[width=$1\linewidth]{$0}

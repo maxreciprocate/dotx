@@ -165,6 +165,8 @@
   (kbd "y r") 'core/entry-action
   (kbd "i o") 'core/odious-line
   (kbd "o c") 'org-clock-goto
+  (kbd "y d") 'org-drill
+  (kbd "y c") 'org-drill-resume
   (kbd "o d") (lambda () (interactive) (find-file "~/leaf/diota.org"))
   (kbd "o e") (lambda () (interactive) (find-file "~/leaf/every.org"))
   (kbd "o z") (lambda () (interactive) (find-file "~/leaf/metaz.org"))
@@ -206,7 +208,7 @@
 (add-hook 'c-mode-hook (lambda () (c-toggle-comment-style -1)))
 
 ;; ■ Netscape
-(setq js-indent-level 4)
+(setq js-indent-level 2)
 (setq js2-strict-inconsistent-return-warning nil)
 
 ;; ■ C?
@@ -431,6 +433,6 @@
              q
              (- count 1)))))
 
-(find-file "~/iros/motif/bassline/double-build.jl")
+(find-file "~/iros/motif/motif/jam.cu")
 
 (org-agenda-list)

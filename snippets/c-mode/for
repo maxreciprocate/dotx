@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: for
+# key: f
+# --
+for (uint16_t idx = 0; idx < $1; idx++) {
+    $0
+}
