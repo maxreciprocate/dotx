@@ -1,0 +1,100 @@
+source ~/.zshrc
+
+super + {t,y,f,b,u}
+      {termite,emacs,firefox,bitwig-studio,pavucontrol}
+
+super + {x, z}
+      termite -e {xpovoc.sh, gamut}
+
+# {paper, general, link to clock, task to clock}
+super + {p, e, v, g}
+      capture {p, e, v, g}
+
+super + q
+      firefox --private-window
+
+{F1,F2,F3,F4}
+      setxkbmap {us,gr,ua,il}
+
+super + F1
+      amixer set Master 0
+
+super + {F2,F3}
+      amixer set Master 5%{-,+}
+
+super + {F4,F5}
+      light -{U,A} 1
+
+super + ctrl + i
+	pkill -USR1 -x sxhkd
+
+super + ctrl + Escape
+	bspc quit
+
+super + {_,shift + }w
+	bspc node -{c,k}
+
+super + m
+	bspc desktop -l next
+
+super + y
+	bspc query -N -n focused.automatic && bspc node -n last.!automatic || bspc node last.leaf -n focused
+
+super + ctrl + {t,shift + t,s,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+super + ctrl + {x,y,z}
+	bspc node -g {locked,sticky,private}
+
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+super + {p,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
+
+super + {_,shift + }c
+	bspc node -f {next,prev}
+
+super + bracket{left,right}
+	bspc desktop -f {prev,next}
+
+super + {Tab}
+	bspc {desktop} -f last
+
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+super + {_,shift + }{1-9,0,-,=}
+	bspc {desktop -f,node -d} '^{1-9,10,11,12}'
+
+super + ctrl + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+super + ctrl + space
+	bspc node -p cancel
+
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+super + alt + {h,j,k,l}
+	bspc node {@west -r -10,@south -r +10,@north -r -10,@east -r +10}
+
+super + alt + shift + {h,j,k,l}
+	bspc node {@east -r -10,@north -r +10,@south -r -10,@west -r +10}
+
+super + {Left,Down,Up,Right}
+	xdo move {-x -20,-y +20,-y -20,-x +20}
+
+~button1
+	bspc pointer -g focus
+
+super + button{1-3}
+	; bspc pointer -g {move,resize_side,resize_corner}
+
+super + @button{1-3}
+	bspc pointer -u
