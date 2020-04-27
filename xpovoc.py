@@ -97,7 +97,7 @@ def present_imera(imera: Imera) -> str:
   summary = imera_summary(imera)
   l1, l2, l3, l4, l5, l6, l7 = last_week_summary()
 
-  s = get_in(summary, 'snmeoctjipyx')
+  s = get_in(summary, 'snmeoctjipyxg')
   d = get_in(summary, 'dkfawq')
 
   pad = 4

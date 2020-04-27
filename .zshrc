@@ -28,8 +28,8 @@ alias xclip="xclip -selection clipboard"
 
 alias es='emerge -s'
 alias ea='_ emerge -av'
-alias es='apt-cache search'
-alias ea='_ apt-get install'
+# alias es='apt-cache search'
+# alias ea='_ apt-get install'
 
 alias -g '.G'='| grep'
 alias -g '.T'='2>&1 | tail'
@@ -184,11 +184,10 @@ bright() {
    vs /sys/class/backlight/intel_backlight/brightness
 }
 
-eval `keychain --quiet --eval --agents ssh hublet`
+eval `keychain --quiet --eval --agents ssh $HUBLET`
 
 xela() {
-    v $1pdf &
-    nodemon --exec "xelatex -shell-escape -8bit -interaction nonstopmode $1tex && xelatex -shell-escape -8bit -interaction nonstopmode $1tex" -e "tex"
+    xelatex -shell-escape -8bit -interaction nonstopmode $1
 }
 
 unixify() {

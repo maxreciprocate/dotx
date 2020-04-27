@@ -1,7 +1,7 @@
 source ~/.zshrc
 
-super + {t,y,f,b,u}
-      {termite,emacs,firefox,bitwig-studio,pavucontrol}
+super + {t,y,f,b,u,s}
+      {termite,emacs,firefox-bin,bitwig-studio,pavucontrol,obs}
 
 super + {x, z}
       termite -e {xpovoc.sh, gamut}
@@ -11,7 +11,7 @@ super + {p, e, v, g}
       capture {p, e, v, g}
 
 super + q
-      firefox --private-window
+      firefox-bin --private-window
 
 {F1,F2,F3,F4}
       setxkbmap {us,gr,ua,il}

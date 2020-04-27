@@ -16,14 +16,14 @@
            emacs-version spacemacs-emacs-min-version)
   (let ((file-name-handler-alist nil))
     (require 'core-spacemacs)
-    (spacemacs/dump-restore-load-path)
     (configuration-layer/load-lock-file)
     (spacemacs/init)
-    (configuration-layer/stable-elpa-init)
+    ;; (configuration-layer/stable-elpa-init)
     (configuration-layer/load)
     (spacemacs-buffer/display-startup-note)
     (spacemacs/setup-startup-hook)
-    (spacemacs/dump-eval-delayed-functions)))
+    ;; (spacemacs/dump-eval-delayed-functions)
+    ))
 
 (require 'server)
 (when dotspacemacs-server-socket-dir
@@ -44,7 +44,6 @@
 
 ;; ■ ORG
 (setq org-modules (quote (org-protocol org-drill)))
-
 (require 'org-protocol)
 (require 'org-drill)
 (setq org-drill-maximum-duration 30)
@@ -54,6 +53,7 @@
 
 (setq warning-minimum-level :emergency
       browse-url-browser-function 'browse-url-firefox
+      browse-url-firefox-program "firefox-bin"
       browse-url-firefox-arguments '("--private-window")
       shell-command-default-error-buffer "*Messages*"
       large-file-warning-threshold nil
@@ -87,7 +87,6 @@
 			               (push '("[-]" . "❍" ) prettify-symbols-alist)
 			               (prettify-symbols-mode)))
 
-
 (setq org-capture-templates
       '(("t" "Hands task" plain (clock) "- [ ] %?" :clock-keep t)
         ;; ("g" "Hands global task" plain (file+headline "~/orgs/s.org" "■ χορηγια") "- [ ] %?")
@@ -110,6 +109,7 @@
 (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
 (setq org-clock-report-include-clocking-task t)
 (setq org-src-fontify-natively t)
+(add-hook 'org-mode-hook #'visual-line-mode)
 
 (setq yas-snippet-dirs '("~/dotx/snippets"))
 (yas-global-mode)
@@ -173,12 +173,14 @@
 
   (kbd "o u") (lambda () (interactive) (find-file "~/iros/muses/muses.org"))
   (kbd "o m") (lambda () (interactive) (find-file "~/iros/motif/motif.org"))
+  (kbd "o l") (lambda () (interactive) (find-file "~/iros/liederkreis/liederkreis.org"))
   (kbd "o s") (lambda () (interactive) (find-file "~/iros/space/space.org"))
   (kbd "o a") (lambda () (interactive) (find-file "~/iros/archs/archs.org"))
   (kbd "o t") (lambda () (interactive) (find-file "~/iros/expan/expan.org"))
   (kbd "o r") (lambda () (interactive) (find-file "~/iros/brows/brows.org"))
   (kbd "o b") (lambda () (interactive) (find-file "~/iros/bases/bases.org"))
   (kbd "o p") (lambda () (interactive) (find-file "~/leaf/papers.org"))
+  (kbd "o x") (lambda () (interactive) (find-file "~/leaf/xpov.org"))
 
   (kbd "f e i") (lambda () (interactive) (find-file "~/dotx/init.el"))
   (kbd "f e d") (lambda () (interactive) (find-file "~/dotx/.spacemacs")))
@@ -375,7 +377,7 @@
          (shell-command "rm *.ipynb")
          (sit-for 1)
          (ein:notebooklist-new-notebook
-          "http://127.0.0.1:8888" (jovian/mode->kernel) 'jovian/new-notebook-steps t nil)))
+          "http://127.0.0.1:9144" (jovian/mode->kernel) 'jovian/new-notebook-steps t nil)))
 
 (spacemacs/set-leader-keys-for-major-mode 'python-mode
   "sc" 'ein:connect-to-notebook-buffer
@@ -433,6 +435,6 @@
              q
              (- count 1)))))
 
-(find-file "~/iros/motif/motif/jam.cu")
+(find-file "~/iros/motif/jam/jam.cu")
 
 (org-agenda-list)
