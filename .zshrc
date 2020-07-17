@@ -36,7 +36,7 @@ alias -g '.T'='2>&1 | tail'
 alias -g '.L'='2>&1 | less -FXS'
 alias -g '.H'='2>&1 | head'
 alias -g '.A'='| awk'
-alias -g '.B'='2>&1 > /dev/null &'
+alias -g '.D'='2>&1 > /dev/null'
 alias -g '.J'='| python -m json.tool'
 alias -g '.X'='| xclip'
 
@@ -54,6 +54,8 @@ alias vuc='vs /etc/portage/package.use'
 alias voc='vs /etc/openvpn/openvpn.conf'
 alias jl='julia'
 alias py='python'
+alias pi='python -m pip'
+alias nsight="_ ~/pacs/nsight/nv-nsight-cu"
 
 c () {cd $1 && echo -- $(pwd) -- && l}
 
@@ -75,7 +77,7 @@ zzz () {
 }
 
 cu () {
-    rc-service tor status
+    rc-service tor status .D
 
     if [[ $? -eq 0 ]]; then
         @@ curl $*
@@ -141,8 +143,8 @@ json () {
 }
 
 paper () {
-    cu -L -H "User-Agent:""$UA"";" "$1" -o ~/shel/${1##*/}
-    echo -n ~/shel/${1##*/} .X
+    cu -L -H "User-Agent:""$UA"";" "$1" -s -o ~/shel/${1##*/}
+    echo -n ${1##*/}
 }
 
 jp () {
@@ -192,4 +194,16 @@ xela() {
 
 unixify() {
     find . -type f -exec perl -pi -e 's/\r\n/\n/g' {} \;
+}
+
+pii () {
+    pi install --user $*
+}
+
+getem () {
+    youtube-dl "$1" -f bestvideo+bestaudio -o $2
+}
+
+fill () {
+    jl ~/iros/muses/filling.jl $*
 }

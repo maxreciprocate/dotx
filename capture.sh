@@ -38,10 +38,10 @@ case $1 in
         xdotool key ctrl+h
         xdotool key ctrl+h
 
-        paper $(xclip -o)
-        input=$(xclip -o | sed 's/\/home\/qq/~/')
+        url=$(xclip -o)
+        filename="file:~/shel/"$(paper $url)
 
-        vars='(org-capture-string "'$input'" "p")'
+        vars='(org-capture-string "'$filename'" "p")'
         bspc desktop -f '^1'
         emacsclient -en $vars;;
 

@@ -169,19 +169,16 @@
   (kbd "y c") 'org-drill-resume
   (kbd "o d") (lambda () (interactive) (find-file "~/leaf/diota.org"))
   (kbd "o e") (lambda () (interactive) (find-file "~/leaf/every.org"))
-  (kbd "o z") (lambda () (interactive) (find-file "~/leaf/metaz.org"))
-
-  (kbd "o u") (lambda () (interactive) (find-file "~/iros/muses/muses.org"))
-  (kbd "o m") (lambda () (interactive) (find-file "~/iros/motif/motif.org"))
-  (kbd "o l") (lambda () (interactive) (find-file "~/iros/liederkreis/liederkreis.org"))
+  (kbd "o z") (lambda () (interactive) (find-file "~/leaf/metas.org"))
+  (kbd "o m") (lambda () (interactive) (find-file "~/iros/muses/muses.org"))
+  (kbd "o f") (lambda () (interactive) (find-file "~/iros/motif/motif.org"))
   (kbd "o s") (lambda () (interactive) (find-file "~/iros/space/space.org"))
   (kbd "o a") (lambda () (interactive) (find-file "~/iros/archs/archs.org"))
-  (kbd "o t") (lambda () (interactive) (find-file "~/iros/expan/expan.org"))
-  (kbd "o r") (lambda () (interactive) (find-file "~/iros/brows/brows.org"))
-  (kbd "o b") (lambda () (interactive) (find-file "~/iros/bases/bases.org"))
+  (kbd "o r") (lambda () (interactive) (find-file "~/iros/expan/expan.org"))
   (kbd "o p") (lambda () (interactive) (find-file "~/leaf/papers.org"))
   (kbd "o x") (lambda () (interactive) (find-file "~/leaf/xpov.org"))
-
+  (kbd "o w") (lambda () (interactive) (find-file "~/leaf/wurned.org"))
+  (kbd "o t") (lambda () (interactive) (find-file "~/leaf/toast.org"))
   (kbd "f e i") (lambda () (interactive) (find-file "~/dotx/init.el"))
   (kbd "f e d") (lambda () (interactive) (find-file "~/dotx/.spacemacs")))
 
@@ -347,7 +344,7 @@
        (pcase (format "%s" major-mode)
          ("js2-mode" "javascript")
          ("python-mode" "python3")
-         ("julia-mode" "julia-1.3")
+         ("julia-mode" "julia-1.4")
          ("c-mode" "c")))
 
 ;; (activate-input-method "TeX")
@@ -435,6 +432,6 @@
              q
              (- count 1)))))
 
-(find-file "~/iros/motif/jam/jam.cu")
+(find-file "~/iros/muses/muses.org")
 
 (org-agenda-list)

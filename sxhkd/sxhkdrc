@@ -8,7 +8,7 @@ super + {x, z}
 
 # {paper, general, link to clock, task to clock}
 super + {p, e, v, g}
-      capture {p, e, v, g}
+      capture.sh {p, e, v, g}
 
 super + q
       firefox-bin --private-window
