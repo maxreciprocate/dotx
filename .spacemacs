@@ -47,6 +47,7 @@ values."
      lua
      lsp
      julia
+     rust
 
      ; of grips
      helm
@@ -65,10 +66,10 @@ values."
                                       ; of text
                                       olivetti
                                       org-plus-contrib
-                                      clang-format
                                       org-drill
 
                                       ; of scriptures
+                                      clang-format
                                       paredit
                                       flycheck
                                       ccls
@@ -81,9 +82,8 @@ values."
                                       async
                                       (ein :location
                                            (recipe :fetcher github
-                                                   :repo "millejoh/emacs-ipython-notebook"
-                                                   :commit "0b2008ea674b535b4b01d8e2381c73bebf3662db"
-                                                   ;; :min-version "0.15.0"
+                                                   :repo "ogoremeni/emacs-ipython-notebook"
+                                                   :branch "sensative"
                                                    :files ("lisp/*.el")))
                                       )
 
@@ -393,7 +393,7 @@ This function is called at the very end of Spacemacs initialization."
  '(org-babel-load-languages (quote ((python . t) (emacs-lisp . t) (shell . t))))
  '(package-selected-packages
    (quote
-    (clang-format treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (helm-gtags ggtags flycheck-rust posframe bui counsel-gtags treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
