@@ -53,7 +53,7 @@
 
 (setq warning-minimum-level :emergency
       browse-url-browser-function 'browse-url-firefox
-      browse-url-firefox-program "firefox-bin"
+      browse-url-firefox-program "firefox-esr"
       browse-url-firefox-arguments '("--private-window")
       shell-command-default-error-buffer "*Messages*"
       large-file-warning-threshold nil
@@ -121,6 +121,7 @@
 (defun core/odious-line () (interactive)
        (insert "sin²(θ) is odious to me"))
 
+
 (defun core/pwd ()
   (s-join "/" (-butlast (s-split "/" buffer-file-name))))
 
@@ -136,16 +137,22 @@
 ;;; Plainly opens zathura on a filename
 ;; (if (equal major-mode 'dired-mode)
 ;; (dired-do-shell-command "zathura")))
-(defun core/zathura-read (&optional filename) (interactive)
-       (unless filename
-         (setq filename (progn (string-match "\\(~\\)\\(\.*\\)+\\.\\(pdf\\|epub\\|djvu\\)" (core/select-line))
-                               (match-string-no-properties 0 (core/select-line)))))
-       (start-process-shell-command "reading-time" "*Messages*" (format "zathura %s" filename)))
+;; (defun core/zathura-read (&optional filename) (interactive)
+;;        (unless filename
+;;          (setq filename (progn (string-match "\\(~\\)\\(\.*\\)+\\.\\(pdf\\|epub\\|djvu\\)" (core/select-line))
+;;                                (match-string-no-properties 0 (core/select-line)))))
+;;        (message filename))
+;;        (start-process-shell-command "reading-time" "*Messages*" (format "zathura %s" filename)))
+
+(defun core/zathura-read () (interactive)
+       (let ((filename (progn (string-match "~\.*\\.pdf" (core/select-line))
+                              (match-string-no-properties 0 (core/select-line)))))
+         (start-process-shell-command "reading-time" "*Messages*" (format "zathura %s" filename))))
 
 ;;; Executed on org-entry will clock-in and either open zathura-reader or open file folder
 ;;; TODO Links
 (defun core/entry-action () (interactive)
-       (let* ((path (->> (core/select-line) (s-split " ") third))
+       (let* ((path (->> (core/select-line) (s-split " ") third)) ; third?
               (zathura-extensions '(".pdf" ".epub" ".djvu")))
          (if (not (s-starts-with? "~" path))
              nil
@@ -169,16 +176,19 @@
   (kbd "y c") 'org-drill-resume
   (kbd "o d") (lambda () (interactive) (find-file "~/leaf/diota.org"))
   (kbd "o e") (lambda () (interactive) (find-file "~/leaf/every.org"))
-  (kbd "o z") (lambda () (interactive) (find-file "~/leaf/metas.org"))
+  (kbd "o z") (lambda () (interactive) (find-file "~/leaf/meta.org"))
   (kbd "o m") (lambda () (interactive) (find-file "~/iros/muses/muses.org"))
   (kbd "o f") (lambda () (interactive) (find-file "~/iros/motif/motif.org"))
   (kbd "o s") (lambda () (interactive) (find-file "~/iros/space/space.org"))
   (kbd "o a") (lambda () (interactive) (find-file "~/iros/archs/archs.org"))
   (kbd "o r") (lambda () (interactive) (find-file "~/iros/expan/expan.org"))
+  (kbd "o g") (lambda () (interactive) (find-file "~/iros/engagement/engage.org"))
   (kbd "o p") (lambda () (interactive) (find-file "~/leaf/papers.org"))
   (kbd "o x") (lambda () (interactive) (find-file "~/leaf/xpov.org"))
   (kbd "o w") (lambda () (interactive) (find-file "~/leaf/wurned.org"))
   (kbd "o t") (lambda () (interactive) (find-file "~/leaf/toast.org"))
+  (kbd "o n") (lambda () (interactive) (find-file "~/leaf/nasty.org"))
+  (kbd "o v") (lambda () (interactive) (find-file "~/leaf/wavel.org"))
   (kbd "f e i") (lambda () (interactive) (find-file "~/dotx/init.el"))
   (kbd "f e d") (lambda () (interactive) (find-file "~/dotx/.spacemacs")))
 
@@ -234,6 +244,7 @@
 (add-hook 'python-mode-hook (lambda () (auto-complete-mode -1)))
 
 ;; ■ JULIE
+
 ;; (setq lsp-julia-package-dir nil)
 ;; (require 'lsp-julia)
 (add-hook 'julia-mode-hook (lambda () (auto-complete-mode -1)))
@@ -344,7 +355,7 @@
        (pcase (format "%s" major-mode)
          ("js2-mode" "javascript")
          ("python-mode" "python3")
-         ("julia-mode" "julia-1.4")
+         ("julia-mode" "julia-1.5")
          ("c-mode" "c")))
 
 ;; (activate-input-method "TeX")
@@ -395,7 +406,6 @@
   "sy" 'jovian/pop-output
   "sj" 'jovian/ride)
 
-
 (define-prefix-command 'jovian-map)
 (define-key 'jovian-map (kbd "C-s") 'jovian/insert-stop-sign)
 (define-key 'jovian-map (kbd "C-e") 'jovian/send-line)
@@ -432,6 +442,6 @@
              q
              (- count 1)))))
 
-(find-file "~/iros/muses/muses.org")
+(find-file "~/leaf/papers.org")
 
 (org-agenda-list)

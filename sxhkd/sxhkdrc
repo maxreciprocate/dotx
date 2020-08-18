@@ -1,17 +1,21 @@
 source ~/.zshrc
+source ~/.zshenv
 
 super + {t,y,f,b,u,s}
-      {termite,emacs,firefox-bin,bitwig-studio,pavucontrol,obs}
+      {termite,emacs,$BROWSER,bitwig-studio,pavucontrol,obs}
 
 super + {x, z}
       termite -e {xpovoc.sh, gamut}
+
+super + {d}
+      alacritty -e dijo
 
 # {paper, general, link to clock, task to clock}
 super + {p, e, v, g}
       capture.sh {p, e, v, g}
 
 super + q
-      firefox-bin --private-window
+      $BROWSER --private-window
 
 {F1,F2,F3,F4}
       setxkbmap {us,gr,ua,il}

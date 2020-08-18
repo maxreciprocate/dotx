@@ -26,10 +26,10 @@ alias _='sudo'
 alias sx='startx -- vt1'
 alias xclip="xclip -selection clipboard"
 
-alias es='emerge -s'
-alias ea='_ emerge -av'
-# alias es='apt-cache search'
-# alias ea='_ apt-get install'
+# alias es='emerge -s'
+# alias ea='_ emerge -av'
+alias es='apt-cache search'
+alias ea='_ apt-get install'
 
 alias -g '.G'='| grep'
 alias -g '.T'='2>&1 | tail'
@@ -53,8 +53,8 @@ alias vmc='vs /etc/portage/make.conf'
 alias vuc='vs /etc/portage/package.use'
 alias voc='vs /etc/openvpn/openvpn.conf'
 alias jl='julia'
-alias py='python'
-alias pi='python -m pip'
+alias py='python3'
+alias pi='py -m pip'
 alias nsight="_ ~/pacs/nsight/nv-nsight-cu"
 
 c () {cd $1 && echo -- $(pwd) -- && l}
@@ -77,13 +77,14 @@ zzz () {
 }
 
 cu () {
-    rc-service tor status .D
+    curl $*
+    # rc-service tor status .D
 
-    if [[ $? -eq 0 ]]; then
-        @@ curl $*
-    else
-        curl $*
-    fi
+    # if [[ $? -eq 0 ]]; then
+    #     @@ curl $*
+    # else
+    #     curl $*
+    # fi
 }
 
 sr () {
@@ -207,3 +208,15 @@ getem () {
 fill () {
     jl ~/iros/muses/filling.jl $*
 }
+
+split () {
+    spleeter separate -p ~/pacs/spleeter/spleeter/resources/$2stems.json -i $1 -o .
+}
+
+iiwpa() {
+    _ pkill wpa_supplicant
+    _ wpa_supplicant -iwlo1 -Dnl80211 -B -d -c /etc/wpa_supplicant/wpa_supplicant.conf
+    _ wpa_cli -i wlo1
+}
+
+echo $METAX[$((${RANDOM:0:1} % ${#METAX} + 1))]
