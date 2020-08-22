@@ -137,13 +137,6 @@
 ;;; Plainly opens zathura on a filename
 ;; (if (equal major-mode 'dired-mode)
 ;; (dired-do-shell-command "zathura")))
-;; (defun core/zathura-read (&optional filename) (interactive)
-;;        (unless filename
-;;          (setq filename (progn (string-match "\\(~\\)\\(\.*\\)+\\.\\(pdf\\|epub\\|djvu\\)" (core/select-line))
-;;                                (match-string-no-properties 0 (core/select-line)))))
-;;        (message filename))
-;;        (start-process-shell-command "reading-time" "*Messages*" (format "zathura %s" filename)))
-
 (defun core/zathura-read () (interactive)
        (let ((filename (progn (string-match "~\.*\\.pdf" (core/select-line))
                               (match-string-no-properties 0 (core/select-line)))))
