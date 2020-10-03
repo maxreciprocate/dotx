@@ -52,10 +52,17 @@ alias vrc='vs /etc/resolv.conf'
 alias vmc='vs /etc/portage/make.conf'
 alias vuc='vs /etc/portage/package.use'
 alias voc='vs /etc/openvpn/openvpn.conf'
-alias jl='julia'
+alias jl='julia --banner=no --startup-file=no'
+alias jlp='julia --startup-file=no --banner=no --project'
 alias py='python3'
-alias pi='py -m pip'
 alias nsight="_ ~/pacs/nsight/nv-nsight-cu"
+
+pi () {
+    dir=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+    mkdir -p /tmp/$dir && cd $_
+    py -m pip $*
+    cd -
+}
 
 c () {cd $1 && echo -- $(pwd) -- && l}
 
@@ -190,7 +197,7 @@ bright() {
 eval `keychain --quiet --eval --agents ssh $HUBLET`
 
 xela() {
-    xelatex -shell-escape -8bit -interaction nonstopmode $1
+    nodemon $1 -x "xelatex -shell-escape -8bit -interaction nonstopmode $1"
 }
 
 unixify() {
@@ -219,4 +226,4 @@ iiwpa() {
     _ wpa_cli -i wlo1
 }
 
-echo $METAX[$((${RANDOM:0:1} % ${#METAX} + 1))]
+# echo $METAX[$((${RANDOM:0:1} % ${#METAX} + 1))]

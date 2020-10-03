@@ -25,6 +25,7 @@
     ;; (spacemacs/dump-eval-delayed-functions)
     ))
 
+
 (require 'server)
 (when dotspacemacs-server-socket-dir
   (setq server-socket-dir dotspacemacs-server-socket-dir))
@@ -35,6 +36,7 @@
 (setq org-agenda-skip-deadline-if-done t)
 (setq org-agenda-skip-scheduled-if-done t)
 
+;; this might slowdown startup quite a lot
 (setq org-agenda-files
       (append (directory-files-recursively "~/iros/" "\.org$")
               (directory-files-recursively "~/leaf/" "\.org$")))
@@ -82,9 +84,9 @@
 (setq ispell-program-name "aspell")
 
 (add-hook 'org-mode-hook (lambda ()
-			               (push '("[ ]" .  "☐") prettify-symbols-alist)
-			               (push '("[X]" . "☑" ) prettify-symbols-alist)
-			               (push '("[-]" . "❍" ) prettify-symbols-alist)
+			               (push '("[ ]" . "☐") prettify-symbols-alist)
+			               (push '("[X]" . "☑") prettify-symbols-alist)
+			               (push '("[-]" . "❍") prettify-symbols-alist)
 			               (prettify-symbols-mode)))
 
 (setq org-capture-templates
@@ -171,7 +173,7 @@
   (kbd "o e") (lambda () (interactive) (find-file "~/leaf/every.org"))
   (kbd "o z") (lambda () (interactive) (find-file "~/leaf/meta.org"))
   (kbd "o m") (lambda () (interactive) (find-file "~/iros/muses/muses.org"))
-  (kbd "o f") (lambda () (interactive) (find-file "~/iros/motif/motif.org"))
+  (kbd "o f") (lambda () (interactive) (find-file "~/iros/bluemesh7/mesh.org"))
   (kbd "o s") (lambda () (interactive) (find-file "~/iros/space/space.org"))
   (kbd "o a") (lambda () (interactive) (find-file "~/iros/archs/archs.org"))
   (kbd "o r") (lambda () (interactive) (find-file "~/iros/expan/expan.org"))
@@ -229,7 +231,6 @@
 (setq c-c++-backend 'lsp-ccls)
 (add-hook 'c++-mode #'lsp)
 (add-hook 'c-mode #'lsp)
-
 ;; ■ SNAKE
 (setq python-guess-indent t
       python-indent-offset 2)
@@ -240,6 +241,9 @@
 
 ;; (setq lsp-julia-package-dir nil)
 ;; (require 'lsp-julia)
+(require 'eglot-jl)
+(setq eglot-connect-timeout 9999999)
+
 (add-hook 'julia-mode-hook (lambda () (auto-complete-mode -1)))
 (add-hook 'julia-mode-hook (lambda () (yas-global-mode)))
 ;; (add-hook 'julia-mode-hook (lambda () (set-input-method "TeX")))
@@ -284,6 +288,7 @@
        (let* ((line (core/select-line))
               (start (string-match "\\([a-z0-9_]+\\) = " line)))
          (if start
+             ;; that's in the julia case of auto returns
              ;; (jovian/send (format "%s;%s" line (match-string-no-properties 1 line)))
              (jovian/send (format "%s" line))
            (jovian/send line))))
@@ -300,25 +305,28 @@
                        (point-max)))))
          (jovian/send (buffer-substring-no-properties start end))))
 
+
 ; ANY
 (defun jovian/send-edit () (interactive)
-       ;;; TODO check major mode
-       (jovian/send (format "@edit %s" (core/select-line))))
-
-;; (defun jovian/send-edit () (interactive)
-;;        (jovian/send (format "@edit %s" (core/select-line))))
+       (let* ((line (core/select-line))
+              (start-pos (string-match "=\\(\.*\\)" line))
+              (expression (if start-pos
+                              (substring-no-properties line (+ start-pos 1))
+                            line)))
+         (jovian/send (format "@edit %s" expression))))
 
 (defun jovian/send-help () (interactive)
-       ;; (let ((command (if (eq major-mode 'julia-mode) ))))
-       (if (eq major-mode 'julia-mode)
-           (jovian/send (format "@doc %s" (core/select-line)))
-         (jovian/send (format "help(%s)" (core/select-line)))))
+       (let* ((line (core/select-line))
+              (start-pos (string-match "=\\(\.*\\)" line))
+              (expression (if start-pos
+                              (substring-no-properties line (+ start-pos 1))
+                            line)))
+         (if (eq major-mode 'julia-mode)
+             (jovian/send (format "@doc %s" expression))
+           (jovian/send (format "help(%s)" expression)))))
 
 (defun jovian/send-dir () (interactive)
        (jovian/send (format "dir(%s)" (core/select-line))))
-
-;; (defun jovian/send-help () (interactive)
-;;        (jovian/send (format "?%s" (core/select-line))))
 
 (defun jovian/current-notebook-buffer () (interactive)
        (--last (string-suffix-p ".ipynb*" it) (helm-buffer-list)))
@@ -374,24 +382,23 @@
 ;;; TODO delete Untitles
 (defun jovian/ride () (interactive)
        (let ((path (core/pwd)))
+         (shell-command "rm Untitled*.ipynb")
          (ein:jupyter-server-start ein:jupyter-default-server-command path)
-         (shell-command "rm *.ipynb")
          (sit-for 1)
          (ein:notebooklist-new-notebook
           "http://127.0.0.1:9144" (jovian/mode->kernel) 'jovian/new-notebook-steps t nil)))
 
 (spacemacs/set-leader-keys-for-major-mode 'python-mode
   "sc" 'ein:connect-to-notebook-buffer
-  "se" 'jovian/pop-output
   "so" 'jovian/start-notebook
   "sn" 'jovian/nuke
   "sk" 'jovian/interrupt-kernel
   "sr" 'jovian/restart-kernel
+  "sy" 'jovian/pop-output
   "sj" 'jovian/ride)
 
 (spacemacs/set-leader-keys-for-major-mode 'julia-mode
   "sc" 'ein:connect-to-notebook-buffer
-  "sy" 'jovina/pop-output
   "so" 'jovian/start-notebook
   "sn" 'jovian/nuke
   "sk" 'jovian/interrupt-kernel
