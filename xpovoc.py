@@ -73,7 +73,7 @@ def imera_from_org(imera_string: str) -> Imera:
 def get_in(xs: {}, values: str) -> float:
   return sum([xs.get(v, 0.0) for v in values])
 
-def present_imera(imera: Imera) -> str:
+def present_imera(imera: Imera, summaryby: str) -> str:
   jiayou = random.choice([
     "今日事, 今日畢",
   ])
@@ -96,7 +96,13 @@ def present_imera(imera: Imera) -> str:
   acts = roll(acts, imera.start_time.hour - 12)
 
   summary = imera_summary(imera)
-  l1, l2, l3, l4, l5, l6, l7 = last_week_summary()
+
+  if summaryby == "day":
+    print("day sm")
+    l1, l2, l3, l4, l5, l6, l7 = this_day_summary()
+  elif summaryby == "week":
+    print("week sm")
+    l1, l2, l3, l4, l5, l6, l7 = last_week_summary()
 
   s = get_in(summary, 'snmeoctjipyxg')
   d = get_in(summary, 'dkfawq')
@@ -137,6 +143,17 @@ def imera_summary(imera: Imera) -> {str, float}:
 
   return work
 
+def this_day_summary() -> str:
+  this_imera = get_imeras(FLAGS.xfile)[-1]
+  summary = imera_summary(this_imera)
+  output = ['&/&' for _ in range(0, 7)]
+  sorted_summary = sorted(summary.items(), key=operator.itemgetter(1), reverse=True)
+
+  for idx, (act, hours) in enumerate(sorted_summary[:7]):
+    output[idx] = f"{act}/{hours:.1f}"
+
+  return output
+
 def last_week_summary() -> str:
   imeras = get_imeras(FLAGS.xfile)
   last_week_imeras = imeras[-8:-1]
@@ -153,7 +170,7 @@ def last_week_summary() -> str:
     daily_acts.update({k: v / 7})
 
   daily_averages = sorted(daily_acts.items(), key=operator.itemgetter(1), reverse=True)
-  daily_top = daily_averages[:7]
+  daily_top = sorted(daily_averages[:7], key=operator.itemgetter(1), reverse=True)
 
   return [f'{act}/{hours:.1f}' for act, hours in daily_top]
 
@@ -193,7 +210,8 @@ def main(_):
     hour, sleep = input().split()
     imera = new_imera(hour, sleep)
 
-  print(present_imera(imera))
+  summaryby = "day"
+  print(present_imera(imera, summaryby))
 
   message = input('')
   while message != '':
@@ -202,6 +220,12 @@ def main(_):
       if imera is not None:
         hour, act = list(imera.acts.items())[-1]
         sys.stdout.write(f'{hour} ≺ {act}\n')
+
+    elif message.isupper():
+      if message == "D":
+        summaryby = "day"
+      elif message == "W":
+        summaryby = "week"
 
     elif message.isdigit():
       imera = imera._replace(rating=int(message))
@@ -212,6 +236,7 @@ def main(_):
       sys.stdout.write('doux!')
 
     sys.stdout.flush()
+    print(present_imera(imera, summaryby))
     message = input('')
 
   save_imeras(FLAGS.xfile, imeras + [imera])

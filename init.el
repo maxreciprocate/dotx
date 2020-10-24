@@ -25,7 +25,6 @@
     ;; (spacemacs/dump-eval-delayed-functions)
     ))
 
-
 (require 'server)
 (when dotspacemacs-server-socket-dir
   (setq server-socket-dir dotspacemacs-server-socket-dir))
@@ -220,7 +219,7 @@
       tab-width 2
       indent-tabs-mode nil)
 
-(setq-default tab-width 2)
+(setq-default tab-width 4)
 
 (require 'whitespace)
 (setq whitespace-line-column 80) ;; limit line length
@@ -233,7 +232,7 @@
 (add-hook 'c-mode #'lsp)
 ;; ■ SNAKE
 (setq python-guess-indent t
-      python-indent-offset 2)
+      python-indent-offset 4)
 
 (add-hook 'python-mode-hook (lambda () (auto-complete-mode -1)))
 
@@ -289,9 +288,12 @@
               (start (string-match "\\([a-z0-9_]+\\) = " line)))
          (if start
              ;; that's in the julia case of auto returns
-             ;; (jovian/send (format "%s;%s" line (match-string-no-properties 1 line)))
-             (jovian/send (format "%s" line))
+             (jovian/send (format "%s;%s" line (match-string-no-properties 1 line)))
+             ;; (jovian/send (format "%s" line))
            (jovian/send line))))
+
+;; (defun jovian/send-line () (interactive)
+;;        (jovian/send (core/select-line)))
 
 ; ANY
 (defun jovian/send-block () (interactive)
@@ -328,6 +330,9 @@
 (defun jovian/send-dir () (interactive)
        (jovian/send (format "dir(%s)" (core/select-line))))
 
+(defun jovian/send-shape () (interactive)
+       (jovian/send (format "%s.shape" (core/select-line))))
+
 (defun jovian/current-notebook-buffer () (interactive)
        (--last (string-suffix-p ".ipynb*" it) (helm-buffer-list)))
 
@@ -339,6 +344,14 @@
 (defun jovian/interrupt-kernel () (interactive)
        (with-current-buffer (jovian/current-notebook-buffer)
          (ein:notebook-kernel-interrupt-command)))
+
+(defun sensual/wrap () (interactive)
+       (progn
+         (evil-append-line 1)
+         (insert ")")
+         (evil-insert-line 1)
+         (insert "(")
+         (evil-insert-line 1)))
 
 (defun jovian/restart-kernel () (interactive)
        (with-current-buffer (jovian/current-notebook-buffer)
@@ -356,7 +369,7 @@
        (pcase (format "%s" major-mode)
          ("js2-mode" "javascript")
          ("python-mode" "python3")
-         ("julia-mode" "julia-1.5")
+         ("julia-mode" "julia-1.6")
          ("c-mode" "c")))
 
 ;; (activate-input-method "TeX")
@@ -416,8 +429,10 @@
 (define-key 'jovian-map (kbd "C-h") 'jovian/send-help)
 (define-key 'jovian-map (kbd "C-u") 'jovian/send-edit)
 (define-key 'jovian-map (kbd "C-d") 'jovian/send-dir)
+(define-key 'jovian-map (kbd "C-g") 'jovian/send-shape)
 (define-key 'jovian-map (kbd "C-n") 'jovian/jump-to-next-square)
 (define-key 'jovian-map (kbd "C-p") 'jovian/jump-to-prev-square)
+(define-key 'jovian-map (kbd "C-w") 'sensual/wrap)
 
 (global-set-key (kbd "C-e") 'jovian-map)
 (define-key evil-normal-state-map (kbd "C-e") 'jovian-map)

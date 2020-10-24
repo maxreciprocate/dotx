@@ -4,4 +4,4 @@ bspc node -t floating
 
 . ~/.zshenv
 
-~/dotx/xpovoc.py --xfile $XFILE
+~/dotx/xpovoc.py --xfile $XFILE | lolcat

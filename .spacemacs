@@ -75,7 +75,7 @@ values."
                                       ccls
                                       yasnippet
                                       cmake-mode
-                                      jupyter
+                                      ;; jupyter
                                       eglot-jl
                                       ;; lsp-protocol
 

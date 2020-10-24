@@ -26,10 +26,13 @@ alias _='sudo'
 alias sx='startx -- vt1'
 alias xclip="xclip -selection clipboard"
 
-# alias es='emerge -s'
-# alias ea='_ emerge -av'
-alias es='apt-cache search'
-alias ea='_ apt-get install'
+if [[ $(uname -rv) =~ .*gentoo.* ]]; then
+    alias es='emerge -s'
+    alias ea='_ emerge -av'
+else
+    alias es='apt-cache search'
+    alias ea='_ apt-get install'
+fi
 
 alias -g '.G'='| grep'
 alias -g '.T'='2>&1 | tail'
@@ -41,8 +44,12 @@ alias -g '.J'='| python -m json.tool'
 alias -g '.X'='| xclip'
 
 v () {
-   bspc desktop -f '^1'
-   emacsclient -nq $* 1> /dev/null
+    if [[ $EDITOR == "emacsclient" ]]; then
+        bspc desktop -f '^1'
+        emacsclient -nq $* 1> /dev/null
+    else
+        $EDITOR $*
+    fi
 }
 
 alias vzc='v ~/.zshrc'
@@ -54,7 +61,7 @@ alias vuc='vs /etc/portage/package.use'
 alias voc='vs /etc/openvpn/openvpn.conf'
 alias jl='julia --banner=no --startup-file=no'
 alias jlp='julia --startup-file=no --banner=no --project'
-alias py='python3'
+alias py='python3.8'
 alias nsight="_ ~/pacs/nsight/nv-nsight-cu"
 
 pi () {
@@ -85,13 +92,6 @@ zzz () {
 
 cu () {
     curl $*
-    # rc-service tor status .D
-
-    # if [[ $? -eq 0 ]]; then
-    #     @@ curl $*
-    # else
-    #     curl $*
-    # fi
 }
 
 sr () {
@@ -226,4 +226,8 @@ iiwpa() {
     _ wpa_cli -i wlo1
 }
 
-# echo $METAX[$((${RANDOM:0:1} % ${#METAX} + 1))]
+sleeping() {
+    while true; do nvidia-smi; sleep 1; done
+}
+
+echo $METAX[$((${RANDOM:0:1} % ${#METAX} + 1))]
