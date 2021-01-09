@@ -25,6 +25,9 @@
     ;; (spacemacs/dump-eval-delayed-functions)
     ))
 
+(setq-default mode-line-format nil)
+;; (hidden-mode-line-mode)
+
 (require 'server)
 (when dotspacemacs-server-socket-dir
   (setq server-socket-dir dotspacemacs-server-socket-dir))
@@ -122,7 +125,6 @@
 (defun core/odious-line () (interactive)
        (insert "sin²(θ) is odious to me"))
 
-
 (defun core/pwd ()
   (s-join "/" (-butlast (s-split "/" buffer-file-name))))
 
@@ -183,6 +185,7 @@
   (kbd "o t") (lambda () (interactive) (find-file "~/leaf/toast.org"))
   (kbd "o n") (lambda () (interactive) (find-file "~/leaf/nasty.org"))
   (kbd "o v") (lambda () (interactive) (find-file "~/leaf/wavel.org"))
+  (kbd "o k") (lambda () (interactive) (find-file "~/iros/expan/kr/kr.org"))
   (kbd "f e i") (lambda () (interactive) (find-file "~/dotx/init.el"))
   (kbd "f e d") (lambda () (interactive) (find-file "~/dotx/.spacemacs")))
 
@@ -230,48 +233,65 @@
 (setq c-c++-backend 'lsp-ccls)
 (add-hook 'c++-mode #'lsp)
 (add-hook 'c-mode #'lsp)
+
 ;; ■ SNAKE
 (setq python-guess-indent t
       python-indent-offset 4)
 
-(add-hook 'python-mode-hook (lambda () (auto-complete-mode -1)))
+(setq flycheck-checker 'python-pylint
+      flycheck-checker-error-threshold 900
+      flycheck-pylintrc "~/.pylintrc"
+      lsp-pyls-plugins-pydocstyle-ignore t
+      lsp-pyls-plugins-pydocstyle-enabled nil
+      lsp-idle-delay 1
 
+      lsp-eldoc-enable-hover nil
+      lsp-signature-auto-activate nil
+      ;; lsp-enable-on-type-formatting nil
+      lsp-enable-symbol-highlighting nil
+
+      auto-completion-minimum-prefix-length 1
+      lsp-enable-symbol-highlighting nil
+      lsp-ui-doc-enable nil)
+
+(add-hook 'python-mode-hook (lambda ()
+                              (lsp)
+                              (company-mode -1)))
+
+(company-mode -1)
+(add-hook 'after-init-hook (company-mode -1))
 ;; ■ JULIE
-
 ;; (setq lsp-julia-package-dir nil)
 ;; (require 'lsp-julia)
-(require 'eglot-jl)
-(setq eglot-connect-timeout 9999999)
-
-(add-hook 'julia-mode-hook (lambda () (auto-complete-mode -1)))
-(add-hook 'julia-mode-hook (lambda () (yas-global-mode)))
-;; (add-hook 'julia-mode-hook (lambda () (set-input-method "TeX")))
+;; (require 'eglot-jl)
+;; (setq eglot-connect-timeout 9999999)
+;; (add-hook 'julia-mode-hook (lambda () (auto-complete-mode -1)))
 
 ;; ■ JOVIAN
 (setq jupyter-repl-echo-eval-p nil)
 (setq ein:jupyter-default-server-command "~/.local/bin/jupyter")
 
-(defconst square-sign "■")
+(defconst sign "■ ;;;;;")
 
 (defun jovian/insert-stop-sign () (interactive)
        (evil-insert-newline-above)
-       (insert square-sign)
+       (insert sign)
        (comment-line 1))
 
 ;;; TODO gg G
 (defun jovian/jump-to-next-square () (interactive)
-       (search-forward square-sign nil t)
+       (search-forward sign nil t)
        (forward-line)
        (evil-digit-argument-or-evil-beginning-of-line))
 
 (defun jovian/jump-to-prev-square () (interactive)
        (forward-line -2)
-       (search-backward square-sign nil t)
+       (search-backward sign nil t)
        (forward-line)
        (evil-digit-argument-or-evil-beginning-of-line))
 
-(font-lock-add-keywords 'org-mode '(("■.*" 0 font-lock-warning-face prepend)))
 (font-lock-add-keywords 'emacs-lisp-mode '(("■.*" 0 font-lock-warning-face prepend)))
+(font-lock-add-keywords 'org-mode '(("■.*" 0 font-lock-warning-face prepend)))
 (font-lock-add-keywords 'python-mode '(("■.*" 0 font-lock-warning-face prepend)))
 (font-lock-add-keywords 'js2-mode '(("■.*" 0 font-lock-warning-face prepend)))
 (font-lock-add-keywords 'julia-mode '(("■.*" 0 font-lock-warning-face prepend)))
@@ -298,11 +318,11 @@
 ; ANY
 (defun jovian/send-block () (interactive)
        (let ((start (save-excursion
-                      (if (search-backward square-sign nil t)
+                      (if (search-backward sign nil t)
                           (line-end-position)
                         (point-min))))
              (end  (save-excursion
-                     (if (search-forward square-sign nil t)
+                     (if (search-forward sign nil t)
                          (line-beginning-position)
                        (point-max)))))
          (jovian/send (buffer-substring-no-properties start end))))

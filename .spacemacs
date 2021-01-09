@@ -56,7 +56,7 @@ values."
 
      ; of meta
      multiple-cursors
-     better-defaults
+     ;; better-defaults
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -68,6 +68,10 @@ values."
                                       org-plus-contrib
                                       org-drill
 
+                                      ; of colours
+                                      doom-themes
+                                      github-modern-theme
+
                                       ; of scriptures
                                       clang-format
                                       paredit
@@ -76,7 +80,7 @@ values."
                                       yasnippet
                                       cmake-mode
                                       ;; jupyter
-                                      eglot-jl
+                                      ;; eglot-jl
                                       ;; lsp-protocol
 
                                       ; of meta
@@ -97,6 +101,7 @@ values."
                                     eyebrowse
                                     org-brain
                                     company-tern
+                                    company
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -111,6 +116,7 @@ values."
 (defun dotspacemacs/init ()
   "Initialization function.
 This function is called at the very startup of Spacemacs initialization
+
 before layers configuration.
 You should not put any user code in there besides modifying the variable
 values."
@@ -150,14 +156,14 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((agenda . 10))
+   dotspacemacs-startup-lists nil; '((agenda . 10))
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive nil
    ;; Default major mode of the scratch buffer (default `text-mode')
@@ -167,6 +173,9 @@ values."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
                          apropospriate-dark
+                         github-modern
+                         doom-spacegrey
+                         github-modern
                          material-light
                          ritchie
                          whiteboard
@@ -181,7 +190,7 @@ values."
                                :size 15
                                :weight normal
                                :width normal
-                               :powerline-scale 0.3)
+                               :powerline-scale 0.5)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -379,11 +388,6 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(defun dotspacemacs/emacs-custom-settings ()
-  "Emacs custom settings.
-This is an auto-generated function, do not modify its content directly, use
-Emacs customize menu instead.
-This function is called at the very end of Spacemacs initialization."
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -397,28 +401,141 @@ This function is called at the very end of Spacemacs initialization."
  '(evil-normal-state-cursor '("#FFEE58" box) t)
  '(evil-visual-state-cursor '("#C5E1A5" box) t)
  '(evil-want-Y-yank-to-eol nil)
+ '(fci-rule-color "#6a737d")
  '(highlight-indent-guides-auto-enabled nil)
  '(highlight-symbol-colors
    '("#FFEE58" "#C5E1A5" "#80DEEA" "#64B5F6" "#E1BEE7" "#FFCC80"))
  '(highlight-symbol-foreground-color "#E0E0E0")
  '(highlight-tail-colors '(("#ed0547ad8099" . 0) ("#424242" . 100)))
  '(indent-tabs-mode nil)
+ '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#D08770"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#A3BE8C"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#4f5b66"))
  '(js2-strict-missing-semi-warning nil)
  '(js2-strict-trailing-comma-warning nil)
+ '(nrepl-message-colors
+   '("#032f62" "#6a737d" "#d73a49" "#6a737d" "#005cc5" "#6f42c1" "#d73a49" "#6a737d"))
+ '(objed-cursor-color "#BF616A")
  '(org-adapt-indentation t)
  '(org-agenda-files
    '("~/iros/archs/archs.org" "~/iros/bases/bases.org" "~/iros/brows/brows.org" "~/iros/expan/expan.org" "~/iros/metas/metas.org" "~/iros/muses/muses.org" "~/iros/space/space.org" "~/leaf/diota.org" "~/leaf/every.org" "~/leaf/papers.org"))
  '(org-babel-load-languages '((python . t) (emacs-lisp . t) (shell . t)))
  '(package-selected-packages
-   '(lsp-treemacs lsp-python-ms helm-lsp flycheck-pos-tip company-reftex company-lua company treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))
+   '(github-modern-theme github-theme doom-themes lsp-treemacs lsp-python-ms helm-lsp flycheck-pos-tip company-reftex company-lua company treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))
  '(pdf-view-midnight-colors '("#FDF4C1" . "#282828"))
  '(pos-tip-background-color "#3a933a933a93")
  '(pos-tip-foreground-color "#9E9E9E")
- '(tabbar-background-color "#357535753575"))
+ '(rustic-ansi-faces
+   ["#2b303b" "#BF616A" "#A3BE8C" "#ECBE7B" "#8FA1B3" "#c678dd" "#46D9FF" "#c0c5ce"])
+ '(tabbar-background-color "#357535753575")
+ '(vc-annotate-background "#3390ff")
+ '(vc-annotate-color-map
+   '((20 . "#6a737d")
+     (40 . "#032f62")
+     (60 . "#6a737d")
+     (80 . "#6a737d")
+     (100 . "#6a737d")
+     (120 . "#d73a49")
+     (140 . "#6a737d")
+     (160 . "#6a737d")
+     (180 . "#6a737d")
+     (200 . "#6a737d")
+     (220 . "#22863a")
+     (240 . "#005cc5")
+     (260 . "#6f42c1")
+     (280 . "#6a737d")
+     (300 . "#005cc5")
+     (320 . "#6a737d")
+     (340 . "#d73a49")
+     (360 . "#6a737d")))
+ '(vc-annotate-very-old-color "#6a737d"))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(font-lock-string-face ((t (:foreground "orange1"))))
+ '(font-lock-variable-name-face ((t (:foreground "gainsboro")))))
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(beacon-color "#ed0547ad8099")
+ '(c-basic-offset 2)
+ '(clean-aindent-mode t)
+ '(company-backends
+   '(company-files company-bbdb company-capf company-clang
+                   (company-gtags company-etags)))
+ '(evil-emacs-state-cursor '("#E57373" hbar) t)
+ '(evil-insert-state-cursor '("#E57373" bar) t)
+ '(evil-normal-state-cursor '("#FFEE58" box) t)
+ '(evil-visual-state-cursor '("#C5E1A5" box) t)
+ '(evil-want-Y-yank-to-eol nil)
+ '(fci-rule-color "#6a737d")
+ '(highlight-indent-guides-auto-enabled nil)
+ '(highlight-symbol-colors
+   '("#FFEE58" "#C5E1A5" "#80DEEA" "#64B5F6" "#E1BEE7" "#FFCC80"))
+ '(highlight-symbol-foreground-color "#E0E0E0")
+ '(highlight-tail-colors '(("#ed0547ad8099" . 0) ("#424242" . 100)))
+ '(indent-tabs-mode nil)
+ '(jdee-db-active-breakpoint-face-colors (cons "#1B2229" "#D08770"))
+ '(jdee-db-requested-breakpoint-face-colors (cons "#1B2229" "#A3BE8C"))
+ '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#4f5b66"))
+ '(js2-strict-missing-semi-warning nil)
+ '(js2-strict-trailing-comma-warning nil)
+ '(nrepl-message-colors
+   '("#032f62" "#6a737d" "#d73a49" "#6a737d" "#005cc5" "#6f42c1" "#d73a49" "#6a737d"))
+ '(objed-cursor-color "#BF616A")
+ '(org-adapt-indentation t)
+ '(org-agenda-files
+   '("~/iros/archs/archs.org" "~/iros/bases/bases.org" "~/iros/brows/brows.org" "~/iros/expan/expan.org" "~/iros/metas/metas.org" "~/iros/muses/muses.org" "~/iros/space/space.org" "~/leaf/diota.org" "~/leaf/every.org" "~/leaf/papers.org"))
+ '(org-babel-load-languages '((python . t) (emacs-lisp . t) (shell . t)))
+ '(package-selected-packages
+   '(github-modern-theme github-theme doom-themes lsp-treemacs lsp-python-ms helm-lsp flycheck-pos-tip company-reftex company-lua treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))
+ '(pdf-view-midnight-colors '("#FDF4C1" . "#282828"))
+ '(pos-tip-background-color "#3a933a933a93")
+ '(pos-tip-foreground-color "#9E9E9E")
+ '(rustic-ansi-faces
+   ["#2b303b" "#BF616A" "#A3BE8C" "#ECBE7B" "#8FA1B3" "#c678dd" "#46D9FF" "#c0c5ce"])
+ '(tabbar-background-color "#357535753575")
+ '(vc-annotate-background "#3390ff")
+ '(vc-annotate-color-map
+   '((20 . "#6a737d")
+     (40 . "#032f62")
+     (60 . "#6a737d")
+     (80 . "#6a737d")
+     (100 . "#6a737d")
+     (120 . "#d73a49")
+     (140 . "#6a737d")
+     (160 . "#6a737d")
+     (180 . "#6a737d")
+     (200 . "#6a737d")
+     (220 . "#22863a")
+     (240 . "#005cc5")
+     (260 . "#6f42c1")
+     (280 . "#6a737d")
+     (300 . "#005cc5")
+     (320 . "#6a737d")
+     (340 . "#d73a49")
+     (360 . "#6a737d")))
+ '(vc-annotate-very-old-color "#6a737d"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(font-lock-builtin-face ((t (:foreground "medium purple"))))
+ '(font-lock-function-name-face ((t (:foreground "medium purple"))))
+ '(font-lock-keyword-face ((t (:foreground "medium purple"))))
+ '(font-lock-preprocessor-face ((t (:foreground "medium purple"))))
+ '(font-lock-string-face ((t (:foreground "orange1"))))
+ '(font-lock-type-face ((t (:foreground "orange1"))))
+ '(font-lock-variable-name-face ((t (:foreground "gainsboro")))))
 )
