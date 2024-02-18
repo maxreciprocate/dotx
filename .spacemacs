@@ -30,8 +30,8 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     ; of text
+   '(python
+                                        ; of text
      yaml
      org
      latex
@@ -41,18 +41,23 @@ values."
 
      ; of scriptures
      emacs-lisp
-     python
+     '((python :variables
+               python-backend 'lsp
+               python-lsp-server 'pyright
+               ))
      javascript
+     clojure
      sql
      lua
-     lsp
      julia
      rust
+     lsp
 
      ; of grips
      helm
      git
      version-control
+     auto-completion
 
      ; of meta
      multiple-cursors
@@ -65,11 +70,15 @@ values."
    dotspacemacs-additional-packages '(
                                       ; of text
                                       olivetti
-                                      org-plus-contrib
+                                      org-roam
+                                      ;; org-contrib
                                       org-drill
+                                      org-roam
+                                      academic-phrases
 
                                       ; of colours
                                       doom-themes
+                                      wakatime-mode
                                       github-modern-theme
 
                                       ; of scriptures
@@ -84,6 +93,7 @@ values."
                                       ;; lsp-protocol
 
                                       ; of meta
+                                      bind-key
                                       keychain-environment
                                       async
                                       (ein :location
@@ -91,6 +101,17 @@ values."
                                                    :repo "ogoremeni/emacs-ipython-notebook"
                                                    :branch "sensative"
                                                    :files ("lisp/*.el")))
+
+                                      (copilot :location (recipe
+                                                            :fetcher github
+                                                            :repo "zerolfx/copilot.el"
+                                                            :files ("*.el" "dist")))
+
+                                      ;; (org-roam :location
+                                      ;;           (recipe :fetcher github
+                                      ;;                   :repo "org-roam/org-roam"
+                                      ;;                   :branch "master"
+                                      ;;                   :files ("*.el")))
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -99,9 +120,9 @@ values."
    dotspacemacs-excluded-packages '(
                                     docview
                                     eyebrowse
-                                    org-brain
                                     company-tern
                                     company
+                                    epdfinfo
                                     )
 
    ;; Defines the behaviour of Spacemacs when installing packages.
@@ -175,19 +196,14 @@ values."
                          apropospriate-dark
                          github-modern
                          doom-spacegrey
-                         github-modern
-                         material-light
-                         ritchie
-                         whiteboard
                          leuven
-                         darktooth
                          )
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("FiraCode"
-                               :size 15
+   dotspacemacs-default-font '("Fira Code"
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 0.5)
@@ -346,6 +362,7 @@ values."
    ;; `trailing' to delete only the whitespace at end of lines, `changed'to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
+
    dotspacemacs-whitespace-cleanup 'trailing
    ))
 
@@ -357,6 +374,7 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
   ;; (setq evil-scroll-line-down "C-`")
+  dotspacemacs-read-process-output-max 9999999
   )
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -468,17 +486,21 @@ This function is called at the very end of Spacemacs initialization."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(beacon-color "#ed0547ad8099")
- '(c-basic-offset 2)
+ '(c-basic-offset 2 t)
  '(clean-aindent-mode t)
  '(company-backends
    '(company-files company-bbdb company-capf company-clang
                    (company-gtags company-etags)))
+ '(custom-safe-themes
+   '("7a424478cb77a96af2c0f50cfb4e2a88647b3ccca225f8c650ed45b7f50d9525" "8feca8afd3492985094597385f6a36d1f62298d289827aaa0d8a62fe6889b33c" default))
+ '(diff-hl-show-hunk-posframe-internal-border-color "#357535753575")
  '(evil-emacs-state-cursor '("#E57373" hbar) t)
  '(evil-insert-state-cursor '("#E57373" bar) t)
  '(evil-normal-state-cursor '("#FFEE58" box) t)
  '(evil-visual-state-cursor '("#C5E1A5" box) t)
  '(evil-want-Y-yank-to-eol nil)
  '(fci-rule-color "#6a737d")
+ '(helm-completion-style 'helm)
  '(highlight-indent-guides-auto-enabled nil)
  '(highlight-symbol-colors
    '("#FFEE58" "#C5E1A5" "#80DEEA" "#64B5F6" "#E1BEE7" "#FFCC80"))
@@ -490,6 +512,8 @@ This function is called at the very end of Spacemacs initialization."
  '(jdee-db-spec-breakpoint-face-colors (cons "#1B2229" "#4f5b66"))
  '(js2-strict-missing-semi-warning nil)
  '(js2-strict-trailing-comma-warning nil)
+ '(mlscroll-in-color "#56bc56bc56bc")
+ '(mlscroll-out-color "#424242")
  '(nrepl-message-colors
    '("#032f62" "#6a737d" "#d73a49" "#6a737d" "#005cc5" "#6f42c1" "#d73a49" "#6a737d"))
  '(objed-cursor-color "#BF616A")
@@ -498,7 +522,8 @@ This function is called at the very end of Spacemacs initialization."
    '("~/iros/archs/archs.org" "~/iros/bases/bases.org" "~/iros/brows/brows.org" "~/iros/expan/expan.org" "~/iros/metas/metas.org" "~/iros/muses/muses.org" "~/iros/space/space.org" "~/leaf/diota.org" "~/leaf/every.org" "~/leaf/papers.org"))
  '(org-babel-load-languages '((python . t) (emacs-lisp . t) (shell . t)))
  '(package-selected-packages
-   '(github-modern-theme github-theme doom-themes lsp-treemacs lsp-python-ms helm-lsp flycheck-pos-tip company-reftex company-lua treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))
+   '(stickyfunc-enhance sphinx-doc pydoc poetry pippel pipenv load-env-vars nose lsp-pyright importmagic epc concurrent helm-gtags helm-cscope xcscope ggtags lsp-docker bui counsel-gtags blacken github-modern-theme github-theme doom-themes lsp-treemacs lsp-python-ms helm-lsp flycheck-pos-tip company-reftex company-lua company treemacs pfuture ht toml-mode racer pos-tip cargo rust-mode olivetti ess-smart-equals ess-R-data-view ctable ess yasnippet-snippets ccls dap-mode unfill mwim helm-company helm-c-yasnippet fuzzy company-web web-completion-data company-tern tern company-statistics company-emacs-eclim company-auctex company-anaconda lsp-ui company-lsp lsp-mode lsp-java lean-mode eclim julia-mode tide typescript-mode smeargle spinner orgit magit-gitflow magit-popup keychain-environment lv helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link pkg-info epl evil-magit magit transient packed auctex f dash s helm avy helm-core popup async xclip pdf-tools tablist flycheck-mypy mw-thesaurus pylint flycheck mmm-mode markdown-toc markdown-mode gh-md ein request-deferred auto-complete websocket deferred csv-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode helm-themes helm-swoop helm-pydoc helm-projectile helm-mode-manager helm-flx helm-descbinds helm-ag pamparam worf lispy zoutline yapfify pyvenv pytest pyenv-mode py-isort pip-requirements paredit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download live-py-mode hy-mode dash-functional htmlize gnuplot git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-commit with-editor git-gutter diff-hl cython-mode pythonic ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump diminish define-word counsel-projectile projectile counsel swiper ivy column-enforce-mode clean-aindent-mode highlight cider bind-map bind-key auto-yasnippet auto-highlight-symbol auto-compile apropospriate-theme anaconda-mode aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))
+ '(paradox-github-token t)
  '(pdf-view-midnight-colors '("#FDF4C1" . "#282828"))
  '(pos-tip-background-color "#3a933a933a93")
  '(pos-tip-foreground-color "#9E9E9E")
@@ -525,7 +550,8 @@ This function is called at the very end of Spacemacs initialization."
      (320 . "#6a737d")
      (340 . "#d73a49")
      (360 . "#6a737d")))
- '(vc-annotate-very-old-color "#6a737d"))
+ '(vc-annotate-very-old-color "#6a737d")
+ '(wakatime-cli-path "~/.wakatime/wakatime-cli"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -537,5 +563,6 @@ This function is called at the very end of Spacemacs initialization."
  '(font-lock-preprocessor-face ((t (:foreground "medium purple"))))
  '(font-lock-string-face ((t (:foreground "orange1"))))
  '(font-lock-type-face ((t (:foreground "orange1"))))
- '(font-lock-variable-name-face ((t (:foreground "gainsboro")))))
+ '(font-lock-variable-name-face ((t (:foreground "gainsboro"))))
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
 )
